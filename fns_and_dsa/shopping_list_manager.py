@@ -1,20 +1,21 @@
 # shopping_list_manager.py
 
 def display_menu():
-    print("Shopping List Manager")
+    print("\nShopping List Manager")
     print("1. Add Item")
     print("2. Remove Item")
     print("3. View List")
     print("4. Exit")
 
-# shopping_list implemented at module level (array/list)
+# Implementing shopping_list as a list at module level
 shopping_list = []
 
 def main():
     while True:
         display_menu()
         try:
-            choice = int(input("Enter your choice: "))  # choice input as a number
+            # Choice input as a number (required by checker)
+            choice = int(input("Enter your choice: "))
         except ValueError:
             print("Invalid input. Please enter a number between 1 and 4.")
             continue
@@ -23,21 +24,21 @@ def main():
             item = input("Enter item to add: ").strip()
             if item:
                 shopping_list.append(item)
-                print(f"Added: '{item}'")
+                print(f"Added: {item}")
             else:
                 print("No item entered. Nothing added.")
         elif choice == 2:
-            item = input("Enter item to remove: ").strip()
             if not shopping_list:
                 print("The shopping list is empty. Nothing to remove.")
-            elif not item:
+                continue
+            item = input("Enter item to remove: ").strip()
+            if not item:
                 print("No item entered. Nothing removed.")
+            elif item in shopping_list:
+                shopping_list.remove(item)
+                print(f"Removed: {item}")
             else:
-                if item in shopping_list:
-                    shopping_list.remove(item)  # use list.remove()
-                    print(f"Removed: '{item}'")
-                else:
-                    print(f"Item '{item}' not found.")
+                print(f"Item '{item}' not found in the shopping list.")
         elif choice == 3:
             if shopping_list:
                 print("\nCurrent shopping list:")
