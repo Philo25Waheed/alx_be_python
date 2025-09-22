@@ -23,7 +23,7 @@ def main():
         raise ValueError("Invalid temperature. Please enter a numeric value.")
 
     unit = input("Is this temperature in Celsius or Fahrenheit? (C/F): ").strip().upper()
-    
+
     if unit == "F":
         converted = convert_to_celsius(temp_input)
         print(f"{temp_input}°F is {converted}°C")
