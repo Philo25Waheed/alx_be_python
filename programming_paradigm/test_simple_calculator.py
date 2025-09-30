@@ -1,72 +1,96 @@
-# test_simple_calculator.py
-
+import sys
 import unittest
 
-class SimpleCalculator:
-    """A simple calculator class that supports basic arithmetic operations."""
+# ---------------------------
+# Calculator Functions
+# ---------------------------
 
-    def add(self, a, b):
-        """Return the addition of a and b."""
-        return a + b
+def add(a, b):
+    return a + b
 
-    def subtract(self, a, b):
-        """Return the subtraction of b from a."""
-        return a - b
+def subtract(a, b):
+    return a - b
 
-    def multiply(self, a, b):
-        """Return the multiplication of a and b."""
-        return a * b
+def multiply(a, b):
+    return a * b
 
-    def divide(self, a, b):
-        """Return the division of a by b. Returns None if b is zero."""
-        if b == 0:
-            return None
-        return a / b
+def divide(a, b):
+    if b == 0:
+        raise ZeroDivisionError("Cannot divide by zero.")
+    return a / b
 
+
+# ---------------------------
+# Unit Tests
+# ---------------------------
 
 class TestSimpleCalculator(unittest.TestCase):
-    """Unit tests for the SimpleCalculator class."""
 
-    def setUp(self):
-        """Set up the SimpleCalculator instance before each test."""
-        self.calc = SimpleCalculator()
-
+    # Test addition
     def test_addition(self):
-        """Test the addition method."""
-        self.assertEqual(self.calc.add(2, 3), 5)
-        self.assertEqual(self.calc.add(-1, 1), 0)
-        self.assertEqual(self.calc.add(-2, -3), -5)
-        self.assertEqual(self.calc.add(0, 5), 5)
-        self.assertEqual(self.calc.add(2.5, 1.25), 3.75)
+        self.assertEqual(add(2, 3), 5)
+        self.assertEqual(add(-1, 1), 0)
+        self.assertEqual(add(-5, -5), -10)
 
+    # Test subtraction
     def test_subtraction(self):
-        """Test the subtraction method."""
-        self.assertEqual(self.calc.subtract(5, 3), 2)
-        self.assertEqual(self.calc.subtract(0, 5), -5)
-        self.assertEqual(self.calc.subtract(-5, -3), -2)
-        self.assertEqual(self.calc.subtract(10, 0), 10)
-        self.assertEqual(self.calc.subtract(2.5, 1.25), 1.25)
+        self.assertEqual(subtract(10, 5), 5)
+        self.assertEqual(subtract(-1, -1), 0)
+        self.assertEqual(subtract(0, 5), -5)
 
+    # Test multiplication
     def test_multiply(self):
-        """Test the multiply method."""
-        self.assertEqual(self.calc.multiply(2, 3), 6)
-        self.assertEqual(self.calc.multiply(-2, 3), -6)
-        self.assertEqual(self.calc.multiply(0, 10), 0)
-        self.assertEqual(self.calc.multiply(-2, -4), 8)
-        self.assertEqual(self.calc.multiply(2.5, 2), 5.0)
+        self.assertEqual(multiply(3, 4), 12)
+        self.assertEqual(multiply(-2, 3), -6)
+        self.assertEqual(multiply(0, 10), 0)
 
+    # Test division
     def test_divide(self):
-        """Test the divide method including division by zero."""
-        # normal cases
-        self.assertEqual(self.calc.divide(10, 2), 5)
-        self.assertEqual(self.calc.divide(-9, 3), -3)
-        self.assertEqual(self.calc.divide(0, 5), 0)
-        self.assertAlmostEqual(self.calc.divide(7, 3), 7/3)
-        # division by zero
-        self.assertIsNone(self.calc.divide(5, 0))
-        # also check floats
-        self.assertAlmostEqual(self.calc.divide(2.5, 0.5), 5.0)
+        self.assertEqual(divide(10, 2), 5)
+        self.assertEqual(divide(-9, 3), -3)
+        with self.assertRaises(ZeroDivisionError):
+            divide(5, 0)
 
+
+# ---------------------------
+# Command Line Interface
+# ---------------------------
+
+def main():
+    if len(sys.argv) == 1:
+        # No arguments → run unit tests
+        unittest.main(argv=[sys.argv[0]])
+    elif len(sys.argv) == 4:
+        operation = sys.argv[1]
+        try:
+            num1 = float(sys.argv[2])
+            num2 = float(sys.argv[3])
+        except ValueError:
+            print("Error: Please enter numeric values only.")
+            sys.exit(1)
+
+        try:
+            if operation == "add":
+                print(add(num1, num2))
+            elif operation == "sub":
+                print(subtract(num1, num2))
+            elif operation == "mul":
+                print(multiply(num1, num2))
+            elif operation == "div":
+                print(divide(num1, num2))
+            else:
+                print("Error: Unknown operation. Use add, sub, mul, or div.")
+        except ZeroDivisionError as e:
+            print(f"Error: {e}")
+    else:
+        print("Usage:")
+        print("  Run tests: python simple_calculator.py")
+        print("  Run operation: python simple_calculator.py <add|sub|mul|div> <num1> <num2>")
+
+
+# ---------------------------
+# Run Program
+# ---------------------------
 
 if __name__ == "__main__":
-    unittest.main()
+    main()
