@@ -1,14 +1,46 @@
+# bank_account_cli.py
+
 import sys
-from bank_account import BankAccount
+
+class BankAccount:
+    def __init__(self, initial_balance=0.0):
+        """Initialize the bank account with an optional initial balance."""
+        self.__account_balance = initial_balance  # Encapsulation with private attribute
+
+    def deposit(self, amount):
+        """Deposit money into the account."""
+        if amount > 0:
+            self.__account_balance += amount
+        else:
+            print("Deposit amount must be positive.")
+
+    def withdraw(self, amount):
+        """Withdraw money if sufficient funds are available."""
+        if amount <= 0:
+            print("Withdrawal amount must be positive.")
+            return False
+
+        if self.__account_balance >= amount:
+            self.__account_balance -= amount
+            return True
+        else:
+            return False
+
+    def display_balance(self):
+        """Display the current account balance."""
+        print(f"Current Balance: ${self.__account_balance:.2f}")
+
 
 def main():
-    account = BankAccount(100)  # Example starting balance
+    # Initialize account with example starting balance
+    account = BankAccount(100.0)
 
     if len(sys.argv) < 2:
-        print("Usage: python main-0.py <command>:<amount>")
+        print("Usage: python bank_account_cli.py <command>:<amount>")
         print("Commands: deposit, withdraw, display")
         sys.exit(1)
 
+    # Split command and optional amount
     command, *params = sys.argv[1].split(':')
     amount = float(params[0]) if params else None
 
@@ -24,6 +56,7 @@ def main():
         account.display_balance()
     else:
         print("Invalid command.")
+
 
 if __name__ == "__main__":
     main()
